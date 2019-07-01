@@ -7,7 +7,7 @@ package chap01;
 	문자열의 길이=>________
 */
 public class APITest2{
-	public static void main(String args[]){
+	public static void main(String[] args){
 		String str = new String("i like java");//메모리에 올리는 작업
 		int l = str.length();
 		System.out.println("문자열의 길이=>"+l);

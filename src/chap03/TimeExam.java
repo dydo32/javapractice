@@ -1,6 +1,6 @@
 package chap03;
 public class TimeExam {
-	public static void main(String args[]){
+	public static void main(String[] args){
 		int time = 8888; //초 데이터
 		//  TimeExam작성
 		//	time변수에 저장된 값을 __시간 __분 __초로 변경해서 출력하세요.

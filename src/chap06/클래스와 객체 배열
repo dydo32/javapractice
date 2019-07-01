@@ -1,0 +1,23 @@
+TestSchool.java
+-> Student, Teacher, Staff
+
+TestMoive.java
+-> Moive
+
+TestAcc.java
+-> Account
+
+BirdPlay.java
+-> Sparrow, Duck
+
+MyMethodTest.java
+-> MyMethod
+
+Calc.java, IfExam03.java, IfTest02.java, Prob1.java
+-> MyMethodUtil
+
+PersonTest03.java
+-> Person
+
+PersonTest.java, PersonTest_Insa.java, testÆÐÅ°Áö TestPerson.java
+-> Person_Before
