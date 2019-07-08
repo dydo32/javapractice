@@ -11,7 +11,7 @@ import java.util.Random;
  *  Ctrl+Shift+\ : 여러 줄 주석 해제
  *  Ctrl+Shift+o : 자동 import
  */ 
-public class test {
+public class Test {
 	public static void main(String[] args) {
 		System.out.println("주석문처리하기");
 		System.out.println("주석문처리하기");
