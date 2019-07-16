@@ -1,0 +1,23 @@
+FirstEventTest	- p.784
+FirstListener 		(CalcMini.java this()확인)
+ActionEventTest
+ActionEventListener
+LayoutExam
+LayoutExamListener  
+LayoutExamLogic				//비즈니스 로직 분리
+CalcMini					//이벤트 붙이는 것은 한군데에서 (CalcMini에서 startEvent(){})
+CalcListener				//main에서
+CalcLogic			
+ItemEventTest01				//JCheckBox		-> 사용자가 체크 선택,해제
+ItemEventTest01Listener
+ItemEventTest02				//JRadioButton	-> 어떤것 누르면 선택되어있는것 해제 따라서,  이벤트가 처음은 1번 , 그 후론 2번씩 발생
+ItemEventTest02Listener	
+ListSelectionEventTest		//JComboBox와 JList
+ListSelectionEventTestListener 				//e.getValueIsAdjusting() -> 완전히 결론이 나는 시점에서 
+																		  마우스 클릭시 누를때 true 땔 때 false
+																		 false인 시점이 내가 선택한 것.
+ItemEventExam																		 
+ItemEventExamListener	
+ItemEventExamLogic
+WindowEventTest 	
+		

@@ -1,0 +1,55 @@
+<<이벤트처리>>
+마우스 움직임이나 키보드의 입력 등 GUI화면에 가해지는 자극을 이벤트라 하며
+이런 이벤트가 발생했을 때 실행할 코드를 작성하여 이벤트를 발생시킨 컴포넌트에 연결하는 것을 이벤트 처리라 한다.
+JVM에서 동작하는 JDK는 이미 이벤트 별로 발생되는 이벤트객체들이 정해져있고 이벤트가 발생할 때 자동으로
+호출되는 클래스와 메소드가 정해져있다. 이렇게 이벤트가 발생했을 때 자동으로 호출되는 클래스를 리스너라 한다.
+리스너 클래스는 이벤트가 발생할 때까지 대기하고 있으며 리스너에 정의되어 있는 메소드가 이벤트가 발생되었을 때 자동으로 호출되는 구조이다.
+
+1. 이벤트 처리 순서
+   1) 이벤트가 발생될 화면을 먼저 디자인한다. 이벤트가 발생될 컴포넌트를 이벤트 소스라 한다.
+   2) 이벤트가 발생되었을때 실행할 리스너 클래스를 작성한다.
+   	  => 발생한이벤트명 + Listener의이름으로정의된API 
+   	  => 사용자정의 리스너를 작성할때 리스너클래스를 implement해서 작성하며
+   	  => 등록된 리스너는 인터페이스이므로 리스너클래스에 정의된 모든 메소드는 추상메소드이다.
+   	  => 이 추상메소드를 모두 오버라이딩하고 필요한 메소드 내부에 실행할 코드를 구현한다.
+   3) 이벤트소스에 이벤트리스너 객체를 연결
+   	  => addXXXXListener(리스너객체)메소드를 이용해서 소스와 리스너를 연결
+   	        ---->이벤트명과 동일
+   	        	 ex) ActionEvent인 경우 ActionListener의 actionPerformed
+   	        	 	  메소드가 자동으로 호출되며 이벤트 소스에 addActionListener메소드를 연결 
+   	  
+   	  
+ 2. 이벤트의 종류
+ 	1) JButton
+ 	   => 버튼을 누를 때 ActionEvent가 발생 -> ActionListener를 구현
+ 	   
+ 	2) JTextField
+ 	   => Enter키를 누를 때 ActionEvent가 발생 -> ActionListener를 구현
+ 	   
+ 	3) JCheckBox, JRadioButton
+ 	   => 선택/해제로 상태값이 바뀔때마다 ItemEvent가 발생 -> ItemListener를 구현   
+ 	   
+ 	4) JComboBox
+ 	   => 아이템을 선택하는 경우 ActionEvent가 발생 -> ActionListener를 구현
+ 	   
+ 	5) JList
+ 	   => JList에서 선택한 값이 변경될 때 ListSelectionEvent가 발생
+ 	      -> ListSelectionListener구현 (Swing의 이벤트)   
+ 	      	 ---------------------> javax.swing.event패키지에서 참조
+ 	   
+ 	6) JFrame
+ 	   => 실행되거나 최대화 최소화되는 경우 WindowEvent가 발생 - WindowListener를 구현
+ 	   	  java.awt를 이용해서 GUI프로그래밍을 하는 경우에는 close버튼에 대한 처리를 이벤트 처리로 해야한다.
+ 	   	    그러나 javax.swing을 이용하는 경우 내부에서 메소드로 지원하므로 필요에 의해서만 리스너를 구현한다.   
+ 	   
+ 	   
+ 	   
+ 	   
+ 	   
+ 	   
+ 	   
+ 	   
+ 	   
+ 	   
+ 	   
+ 	 

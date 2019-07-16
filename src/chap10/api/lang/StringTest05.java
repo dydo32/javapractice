@@ -36,6 +36,12 @@ public class StringTest05 {
 		
 		test(i+""); // 급할경우, 문자열화 해줌
 		test(d+"");
+		
+		// String -> Integer/ Integer -> String
+		String str = "12345";
+		int num = Integer.parseInt(str);
+		str = Integer.toString(num); // str = num + "";
+		
 	}
 	public static void test(String data){
 		System.out.println("변환된 데이터=> "+data);
