@@ -1,0 +1,31 @@
+InetAddressTest
+URLTest01
+URLTest02
+MyNetServer01
+MynetClient01
+MyNetServer02
+MynetClient02
+MyNetServer03
+MynetClient03
+MyNetServer04
+MynetClient04
+EchoServer01
+EchoClient01
+EchoServer02
+EchoClient02
+EchoServer03
+EchoClient03
+
+network.console.chat 패키지생성
+  [클라이언트 프로그램]
+	1. ConsoleChatClient.java     :  main메소드가 있는 클래스
+						  서버에 접속한 후 ClientReceiverThread와 ClientSenderThread를 start시키는 작업
+	2. ClientReceiverThread.java : 서버가 전송하는 메시지를 읽어서 출력하는 쓰레드
+	3. ClientSenderThread.java : 클라이언트가 키보드로 입력한 데이터를 서버로 메시지를 보내는 작업을 수행하는 쓰레드
+  [서버 프로그램]
+	1. ConsoleChatServer.java     :  main메소드가 있는 클래스
+						   클라이언트의 접속을 대기하고 접속한 클라이언트의 ip를 출력하고 두개의 쓰레드를 start
+	2. ServerReceiverThread.java : 클라이언트가 전송하는 메시지를 읽어서 출력하는 쓰레드
+	3. ServerSenderThread.java : 서버가 키보드로 입력한 데이터를 클라이언트로 메시지를 보내는 작업을 수행하는 쓰레드
+	
+	
