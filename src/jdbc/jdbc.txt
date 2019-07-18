@@ -1,0 +1,187 @@
+JDBC(Java DataBase Connectivity)
+=> 자바에서 DBMS와 연동하기 위한 기술 (java에서 SQL을 실행하기 위해서 제공되는 API)
+
+<<오라클에 접속하여 JDBC를 사용하기 전에 해야할 일>>
+1. 오라클 드라이버를 다운로드 받는다.
+   - 모든 드라이버는 제조사 홈페이지에서 다운로드 받는다. (www.oracle.com)
+   - 오라클 xe가 설치된 경우
+   	 C:\oraclexe\app\oracle\product\11.2.0\server\jdbc\lib의
+   	 ojdbc6.jar파일을 이용
+   	 ---------->오라클 드라이버 파일
+  
+2. JVM이 인식할 수 있는 위치로 오라클 드라이버를 복사
+   1)이클립스가 아닌 경우
+     C:\Program Files\Java\jdk1.8.0_162\jre\lib\ext에 라이브러리를
+            복사하거나 classpath를 이용해서 등록하고 사용
+            지양 
+   2)이클립스를 사용하는 경우
+   	  ① 작업 프로젝트를 선택
+   	  ② 프로젝트 선택 후 단축메뉴 - [Build path] - [Configure Build Path..] 선택
+   	  ③ 대화상자에서 세 번째 탭인 [Libraries]탭 선택 
+   	  ④ [Add External Jars..] 선택 후 라이브러리 파일의 경로를 찾아 라이브러리 파일 등록하기
+   	
+   	
+   	
+ <<자바 JDBC연동>>
+ API를 이용해서 작업
+ 1. 오라클 드라이버 로딩
+ 	java.lang패키지에 Class라는 클래스를 이용해서 오라클 드라이버의 핵심클래스를 메모리에 로딩
+ 	핵심 클래스를 드라이버클래스라 하며 드라이버클래스는 어떤 DBMS를 쓰느냐에 따라서 달라진다.
+ 	제조사 홈페이지에서 드라이버 클래스명을 확인
+ 	[오라클]
+ 	Class.forName("패키지를 포함한 클래스명");
+ 	Class.forName("oracle.jdbc.driver.OracleDriver");
+ 				   ------------------------------->오라클 드라이버명(패키지 포함)
+ 	[MySQL]
+ 	com.mysql.jdbc.Driver			   
+ 
+ 2. DB서버에 연걸하기
+ 	=> java.sql패키지의 API를 이용
+ 	   DriverManager의 getConnection메소드를 이용해서 DB서버에 연결
+ 	   1) static메소드이므로 클래스이름으로 액세스
+ 	   2) throws하고 있는 SQLException은 Exception의 하위이므로 
+ 	   	  (즉, RuntimeException의 하위가 아니므로)
+ 	   	    문법적으로 Exception에 대한 처리를 해야 한다.(try~catch를 이용)
+ 	   3) 매개변수
+ 	   	  url: 연결문자열 (어떤 DBMS를 쓰느냐에 따라서 다른 형식의 문자열을 작성 - 제조사홈페이지 참고)
+ 	   	  [오라클]
+ 	   	  jdbc:oracle:thin:@ip:port:데이터베이스 서비스명
+ 		  ----------------  ------- --------------
+ 		    오라클에서 사용하는 프로토콜	|	     오라클 설치할 때 셋팅하는 값으로 달라질 수 있으며
+ 		    					|	   express버전은 기본값이 xe
+ 		    					|_ DBMS가 설치되어 있는 PC의 ip와 port(1521)
+		  ex) 127.0.0.1 or localhost => 현재 작업 중인 pc로컬을 지칭
+ 		  ex) jdbc:oracle:thin:@127.0.0.1:1521:xe
+   			  jdbc:oracle:thin:@localhost:1521:xe
+   			  jdbc:oracle:thin:@211.42.204.107:1521:xe
+   			
+   		  user: 사용자계정	(기본값 - scott)
+   		  password: 패스워드	  
+   		  
+   		  [mysql의 연결문자열]
+   		  jdbc:mysql://ip/데이터베이스명 (3306)
+   		  user - root
+       4) 리턴타입
+       	  java.sql.Connection이 리턴
+       	  DriverManager클래스의 getConnection메소드는 DB서버에 연결하고 연결정보를
+       	    객체로 만들어서 리턴한다.
+       	    표준API는  java.sql.Connection이지만 어떤 DBMS의 드라이버가 로딩되었냐에 따라 달라진다.
+       	    따라서 Connection은 인터페이스로 정의되어 있다.
+       	    내부에서 어떤 DBMS를 사용하냐에 따라 다른 Connection객체의 오버라이딩된 메소드가 실행되도록
+       	    다형성이 적용되어 있다.
+       5) 사용방법
+       	  Connection con = 
+       	  			DriverManager.getConnection(url,user,password)
+       	  => 어떤 DBMS로 접속했는지에 따라서 다른 Connection객체가 리턴되며 con이라는 이름의
+       	          참조변수를 통해서 접근할 수 있다.
+       	          오라클을 사용하는 경우에는 오라클의 연결정보가 리턴되고 MySQL을 쓰는 경우는 MySQL의
+       	          연결정보가 객체로 리턴된다.
+       	          
+3. SQL을 실행하기 위한 기능을 갖고 있는 객체를 생성
+   [상속구조]
+   +-----------+
+   | Statement |					- 정적SQL을 실행할때 사용 (보안취약)
+   +-----------+
+   		 ^
+   		 |
+   +------------------+
+   | PrepareStatement |				- 동적SQL을 실행할때 사용 (시큐어코딩에 적합)
+   +------------------+
+   		 ^
+   		 |
+   +-------------------+
+   | CallableStatement |			- 각 DBMS에 특화된 SQL로 작성된 명령문을 실행
+   +-------------------+			    오라클: PL-SQL
+
+   => SQL을 실행할 수 있는 메소드를 갖고 있는 객체
+   1) Statement객체를 이용
+   	  Connection객체가 갖고 있는 createStatement라는 메소드를 이용해서 생성
+   	  [형식]
+   	   Statement stmt = con.createStatement()
+   	   : stmt객체는 오라클 드라이버에 포함되어 있는 클래스가 리턴	
+   	  
+   2) PreparedStatement객체를 이용
+	  Connection에 정의되어 있는 prepareStatement()메소드를 이용해서 생성
+	  PreparedStatement객체가 sql문을 실행하는 방식은 미리 sql문을 파싱해 놓고
+	     외부에서 입력받는 값을 문자열로 전달해서 실행할 수 있게 하는 방식
+	  Statement객체로 처리하기 힘든 동작 SQL문을 처리할 때 사용
+	  
+	  ① sql문을 전달하며 PreparedStatement객체 생성
+	  sql문을 미리 파싱해놓는 방식이므로 Connection의 PrepareStatement객체를 호출해서
+	  PreparedStatement객체를 만들때 sql문을 전달해야 한다.
+	  	PreparedStatement ptmt = con.PrepareStatement(sql문)
+	  ② 이 때 전달할 sql문에서 외부에서 입력받아 처리할 부분은 ?로 대체한다.
+	  		insert into 테이블명 values(?,?,1000,?,?)		//? 는 값에만 올 수있고, 필드에 적용 불가
+	  ③ ?에 대한 값을 셋팅
+	    ?에 외부에서 전달받는 값을 설정해 주어야 SQL문이 완성된다.
+	    PreparedStatement에 있는 setXXXX메소드를 이용. setXXXX는 타입과 연결되는 메소드
+	    ResultSet에서 getXXXX와 동일한 방법으로 해석
+	    ptmt.setString(1,"jang") = > 첫 번째 물음표에 셋팅할 값은 타입이 String(문자열)이고
+	    			  --			  즉, varchar2이고 셋팅할 값은 "jang"
+	    			  ?순서	 		 1번 ?에 "jang"을 설정
+	    	
+	  	
+4. SQL실행
+   1) Statement를 사용
+   	  ① executeUpdate: insert, update, delete명령문을 실행
+   	  				      매개변수에 sql문을 전달하면 실행결과 몇 개의 row가 반영되었는지 리턴
+   	  			int result = stmt.executeUpdate(sql)
+   	  		    ----------
+   	  		    |
+   	  		    |_ 몇 개의 행이 삽입, 수정, 삭제 되었는지 리턴	       
+   	  ② executeQuery: select명령문을 실행
+   	  				    실행한 후 조회된 테이블을 리턴, DBMS에서 조회된 테이블을 사용하기 위해
+   	  				    모델링한 자바 객체가 ResultSet이다.
+   	  				    실제로는 어떤 DBMS가 사용되었는지에 따라 다른 ResultSet객체가 리턴
+   	  				    				    		      
+   2) PreparedStatement를 사용
+	  ① executeUpdate: insert, update, delete명령문을 실행
+	  ② executeQuery: select명령문을 실행
+	  ===> 리턴유형이나 실행 모두 Statement와 동일하지만 매개변수가 없다.
+	  
+5. 결과처리
+   1) insert, delete, update
+      - 모두 int를 리턴하므로 동일한 방법으로 처리
+        int result = stmt.executeUpdate(sql)
+   
+   2) select
+   	  sql-plus프로그램을 이용해서 select sql문을 실행할 때 결과로 보여지는 2차원 표의 데이터를
+   	    자바에서 사용할 수 있도록 모델링해 놓은 클래스가 ResultSet
+   	    ① select문을 실행하면 ResultSet을 리턴하기 때문에 ResultSet타입의 변수를 
+   	     선언해서 결과를 참조
+   	        ResultSet rs = stmt.executeQuery(sql문)
+   	    ② ResultSet에 있는 테이블의 데이터를 읽기 위해서 ResultSet이 제공하는 메소드를
+   	      이용해서 작업, Cursor를 다음 레코드로 이동하면서 레코드 갯수만큼 반복작업을 수행
+   	   ResultSet에 있는 next()를 이용하면 다음 레코드로 커서를 이동할 수 있다.
+   	   next()는 커서를 이동했을 때 레코드가 존재하면 true를 리턴하고 레코드가 없으면 false를 리턴
+   	      	while(rs.next()){
+   	      		//레코드의 각 컬럼을 읽는다.
+   	      	}	
+  	③ 한 번에 하나의 컬럼만 읽을 수 있다. ResultSet의 getXXXX메소드를 이용해서 컬럼값을 가져온다
+  		 타입에 따라 구분
+  		   	- 오라클 타입이 varchar2나 char인 경우: java의 String
+  		   	  getString(컬럼명) or getString(컬럼의 순서 index)
+  		   	 							  -------------
+  		   	 							  	|
+  		   	 							  	|_ 원본 테이블에 정의된 컬럼 순서가 아니라 조회된
+  		   	 							  		테이블의 컬럼 순서를 의미
+  		   	- 오라클 타입이 number: java의 int
+  		   	  getInt(컬럼명) or getInt(컬럼 index)
+  		   	- 오라클 타입이 date: java.sql.Date클래스
+  		   	  getDate(컬럼명) or getDate(컬럼index)							  		
+  		 	while(rs.next()){ ==> 커서를 하나씩 다음으로 이동해라
+  		 						    조회된 레코드 수만큼 반복해서 작업하고
+  		 						    다음 레코드가 있는 경우 true리턴
+  				sysout(rs.getString("name")); => name이라는 컬럼명으로 정의되어 있는 
+  												  컬럼의 데이터를 읽어서 출력
+  				sysout(rs.getString(2)); => 조회된 테이블의 2번째 컬럼의 데이터를 읽어서 출력
+  			}
+  			
+ 6. 자원반납
+  	클라이언트가 점유해서 사용하던 자원을 반납하는 작업을 해야한다.
+  	Connection, Statement, ResultSet 모든 자원을 반납해야 한다. 
+  	close메소드를 이용해서 반납하며 만들어진 순서가 아니라 제일 마지막에 생성된 객체부터 반납한다.
+  	
+  	
+  
+  
