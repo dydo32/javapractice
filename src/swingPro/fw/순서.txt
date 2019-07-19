@@ -1,0 +1,16 @@
+InsaMain
+DeptMainListener
+DeptInsertPage
+DeptSelectPage
+DeptEmpSelectPage
+
+
+->step02하고나서
+fw패키지
+dept.dao 패키지
+dept.service 패키지
+
+InsertOK -> icon에 사진넣을수있음
+		 -> label 위에 있을 수록 바깥쪽
+		 
+DeptQuery ->sql관리
